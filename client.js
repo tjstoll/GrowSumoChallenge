@@ -1,4 +1,4 @@
-const server = io('http://localhost:3003/');
+const server = io();
 const list = document.getElementById('todo-list');
 
 // NOTE: These are all our globally scoped functions for interacting with the server
@@ -9,7 +9,7 @@ function add() {
 
     // Emit the new todo as some data to the server
     server.emit('make', {
-        titlé : input.value
+        title : input.value
     });
 
     // Clear the input

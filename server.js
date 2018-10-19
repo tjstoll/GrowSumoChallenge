@@ -1,6 +1,7 @@
 const app = require('express')();
 const http = require('http').Server(app);
 const server = require('socket.io')(http);
+
 const firstTodos = require('./data');
 const Todo = require('./todo');
 
@@ -10,6 +11,7 @@ app.get('/', function(req, res){
 });
 
 server.on('connection', (client) => {
+    console.log('Connection established');
     // This is going to be our fake 'database' for this application
     // Parse all default Todo's from db
 
@@ -35,7 +37,8 @@ server.on('connection', (client) => {
 
         // Send the latest todos to the client
         // FIXME: This sends all todos every time, could this be more efficient?
-        reloadTodos();
+        // Only render the newest item
+        server.emit('render', newTodo);
     });
 
     // Send the DB downstream on connect

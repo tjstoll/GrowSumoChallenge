@@ -1,0 +1,79 @@
+* {
+  font-size: 20px;
+  font-family: 'Consolas', sans-serif;
+}
+
+.container {
+  margin:auto;
+  padding: 0.2rem;
+  background: #e6e6e6;
+  /* border: 1px solid black; */
+}
+
+input {
+  background: #e6ffff;
+  outline: none;
+  border: none;
+}
+
+button, input, li {
+  padding: 1rem 0.5rem;
+}
+
+button[name='add'] {
+  background: #006600;
+  border: none;
+  color: #e6ffe6;
+}
+
+button[name='completeAll'] {
+  background: #66ff66;
+  border: none;
+  color: #e6ffe6;
+}
+
+button[name='completeAll']:active {
+  color: white;
+}
+
+button[name='completeAll']:hover {
+  background: #99ff99;
+}
+
+button[name='deleteAll'] {
+  background: #cc0000;
+  border: none;
+  color: #ffe6e6;
+}
+button[name='deleteAll']:active {color: white;}
+button[name='deleteAll']:hover {background: #aa0000;}
+
+.flex1 {flex: 1;}
+.flex2 {flex: 2;}
+
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+}
+.form {
+  display: flex;
+}
+
+.options {
+  display: flex;
+  border-top: 0.2rem solid #e6e6e6;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+li {
+  position: relative;
+  /* padding: 1rem 0; */
+  text-align: center;
+  background: white;
+  border-top: 0.2rem solid #e6e6e6;
+}

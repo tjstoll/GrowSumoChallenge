@@ -16,8 +16,6 @@ const DB = firstTodos.map((t) => {
     return new Todo(t.title);
 });
 
-console.log(DB);
-
 server.on('connection', (client) => {
     // This is going to be our fake 'database' for this application
     // Parse all default Todo's from db

@@ -7,7 +7,7 @@
   margin:auto;
   padding: 0.2rem;
   background: #e6e6e6;
-  /* border: 1px solid black; */
+  width: 50%;
 }
 
 input {
@@ -54,6 +54,7 @@ button[name='deleteAll']:hover {background: #aa0000;}
 .wrapper {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
 }
 .form {
   display: flex;

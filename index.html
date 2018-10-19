@@ -64,11 +64,10 @@
         .wrapper {
           min-height: 100vh;
           display: flex;
+          flex-direction: column;
         }
-        .form {
-          display: flex;
-        }
-
+        .instructions {text-align: center;}
+        .form {display: flex;}
         .options {
           display: flex;
           border-top: 0.2rem solid #e6e6e6;
@@ -92,6 +91,11 @@
     </head>
     <body>
       <div class="wrapper">
+        <div class="instructions">
+          <h1>Check it out</h1>
+          <p><b>Click</b> to complete!</p>
+          <p><b>Double Click</b> to delete!</p>
+        </div>
         <div class="container">
           <div class="form">
             <input class='flex2' id="todo-input" type="text" placeholder="Feed the cat" autofocus>
@@ -127,6 +131,7 @@
           input.focus();
       }
 
+      // Complete or delete all of the items in the list
       function bulkAction(action) {
         items = list.getElementsByTagName('li');
 
@@ -135,6 +140,7 @@
           }
       }
 
+      // Complete or delete a single item in the list
       function completeDelete (elem, action) {
         server.emit('completeDelete', {
           info: elem.innerHTML,
@@ -167,6 +173,7 @@
         render(item);
       });
 
+      // Highlight or remove the item that has been completed or deleted
       server.on('highlightRemove', (item) => {
         items = list.getElementsByTagName('li');
         if (item.action == 'complete') {
@@ -176,27 +183,5 @@
           list.removeChild(list.childNodes[item.index]);
         }
       });
-
-      // server.on('complete', (item) => {
-      //   items = list.getElementsByTagName('li');
-      //   console.log(items);
-      //   for (let i=0; i<items.length; i++) {
-      //     if (item == items[i].innerHTML) {
-      //       items[i].style.background = '#66ff66';
-      //       items[i].style.color = 'white';
-      //     }
-      //   }
-      // });
-      //
-      // server.on('remove', (item) => {
-      //   items = list.getElementsByTagName('li');
-      //   console.log(items);
-      //   for (let i=0; i<items.length; i++) {
-      //     if (item == items[i].innerHTML) {
-      //       list.removeChild(list.childNodes[0]);
-      //       break;
-      //     }
-      //   }
-      // });
     </script>
 </html>

@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         <title>TODO</title>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
         <!-- <link rel="stylesheet" href="styles.css"> -->
@@ -18,7 +17,7 @@
           margin:auto;
           padding: 0.2rem;
           background: #e6e6e6;
-          /* border: 1px solid black; */
+          width: 50%;
         }
 
         input {
@@ -95,25 +94,21 @@
       <div class="wrapper">
         <div class="container">
           <div class="form">
-            <input class='flex1' id="todo-input" type="text" placeholder="Feed the cat" autofocus>
-            <button class='flex2' type="button" onclick="add()" name='add'>ADD</button>
+            <input class='flex2' id="todo-input" type="text" placeholder="Feed the cat" autofocus>
+            <button class='flex1' type="button" onclick="add()" name='add'>ADD</button>
           </div>
           <div class="options">
-            <button type="button" name="completeAll"> <i class="fas fa-check-circle"></i> COMPLETE ALL</button>
-            <button type="button" name="deleteAll"><i class="fas fa-trash-alt"></i> DELETE ALL</button>
+            <button class='flex1' type="button" name="completeAll" onclick='completeAll()'> <i class="fas fa-check-circle"></i> COMPLETE ALL</button>
+            <button class='flex1' type="button" name="deleteAll" onclick='deleteAll()'><i class="fas fa-trash-alt"></i> DELETE ALL</button>
           </div>
           <div class="list">
-            <ul id="todo-list">
-              <!-- <li><i class="fas fa-check-circle"></i> ITEM 1 <i class="fas fa-trash-alt"></i></li>
-              <li><i class="fas fa-check-circle"></i> ITEM 2 <i class="fas fa-trash-alt"></i></li>
-              <li><i class="fas fa-check-circle"></i> ITEM 3 <i class="fas fa-trash-alt"></i></li> -->
-            </ul>
+            <ul id="todo-list"></ul>
           </div>
         </div>
       </div>
     </body>
     <script type='text/javascript' async>
-      const server = io();
+      const server = io('http://localhost:3003/');
       const list = document.getElementById('todo-list');
 
       // NOTE: These are all our globally scoped functions for interacting with the server
@@ -133,9 +128,37 @@
 
       }
 
+      function completeAll() {
+        items = list.getElementsByTagName('li');
+        console.log(items);
+        // items.forEach((elem) => {deleted(elem)})
+        for (let i=0; i<items.length; i++) {
+          complete(items[i]);
+        }
+      }
+
+      function deleteAll() {
+        items = list.getElementsByTagName('li');
+        console.log(items);
+        // items.forEach((elem) => {deleted(elem)})
+        for (let i=0; i<items.length; i++) {
+          deleted(items[i]);
+        }
+      }
+
+      function complete(elem) {
+        server.emit('completed', elem.innerHTML);
+      }
+
+      function deleted(elem) {
+        server.emit('deleted', elem.innerHTML);
+      }
+
       function render(todo) {
           console.log(todo);
           const listItem = document.createElement('li');
+          listItem.setAttribute('onclick', 'complete(this)');
+          listItem.setAttribute('ondblclick', 'deleted(this)');
           const listItemText = document.createTextNode(todo.title);
           listItem.appendChild(listItemText);
           list.append(listItem);
@@ -149,6 +172,28 @@
 
       server.on('render', (item) => {
         render(item);
+      });
+
+      server.on('complete', (item) => {
+        items = list.getElementsByTagName('li');
+        console.log(items);
+        for (let i=0; i<items.length; i++) {
+          if (item == items[i].innerHTML) {
+            items[i].style.background = '#66ff66';
+            items[i].style.color = 'white';
+          }
+        }
+      });
+
+      server.on('remove', (item) => {
+        items = list.getElementsByTagName('li');
+        console.log(items);
+        for (let i=0; i<items.length; i++) {
+          if (item == items[i].innerHTML) {
+            list.removeChild(list.childNodes[0]);
+            break;
+          }
+        }
       });
     </script>
 </html>

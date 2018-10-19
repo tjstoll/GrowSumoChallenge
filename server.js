@@ -10,22 +10,30 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+// Initiate the database for this server
+const DB = firstTodos.map((t) => {
+    // Form new Todo objects
+    return new Todo(t.title);
+});
+
 server.on('connection', (client) => {
-    console.log('Connection established');
     // This is going to be our fake 'database' for this application
     // Parse all default Todo's from db
 
     // FIXME: DB is reloading on client refresh. It should be persistent on new client
     // connections from the last time the server was run...
-    const DB = firstTodos.map((t) => {
-        // Form new Todo objects
-        return new Todo(t.title);
-    });
+
+    // Need to move the DB creation outside of the connection
+    // Otherwise DB will be overwritten on new connection
 
     // Sends a message to the client to reload all todos
     const reloadTodos = () => {
-        server.emit('load', DB);
+        client.emit('load', DB);
     }
+
+    // client.emit('newConnection', () => {
+    //
+    // })
 
     // Accepts when a client makes a new todo
     client.on('make', (t) => {

@@ -31,10 +31,6 @@ server.on('connection', (client) => {
         client.emit('load', DB);
     }
 
-    // client.emit('newConnection', () => {
-    //
-    // })
-
     // Accepts when a client makes a new todo
     client.on('make', (t) => {
         // Make a new todo
@@ -49,22 +45,16 @@ server.on('connection', (client) => {
         server.emit('render', newTodo);
     });
 
-    // Go through the DB and delete the todo that matches
-    client.on('deleted', (item) => {
-      for (let i=0; i<DB.length; i++) {
-        if (DB[i].title == item) {
-          DB.splice(i, 1);
-          server.emit('remove', item);
-          break;
-        } else {}
-      }
-    });
-
-    // Go through the DB and delete the todo that matches
-    client.on('completed', (item) => {
-      for (let i=0; i<DB.length; i++) {
-        if (DB[i].title == item) {
-          server.emit('complete', item);
+    // Iterate through the  database and delete or grab completed items
+    client.on('completeDelete', (item) => {
+      for (let i = 0; i < DB.length; i++) {
+        if (DB[i].title == item.info) {
+          if (item.action == 'complete') {
+            server.emit('highlightRemove', {index: i, action: 'complete'});
+          } else {
+            DB.splice(i, 1);
+            server.emit('highlightRemove', {index: i, action: 'delete'});
+          }
           break;
         } else {}
       }

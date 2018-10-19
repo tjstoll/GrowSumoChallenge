@@ -16,6 +16,8 @@ const DB = firstTodos.map((t) => {
     return new Todo(t.title);
 });
 
+console.log(DB);
+
 server.on('connection', (client) => {
     // This is going to be our fake 'database' for this application
     // Parse all default Todo's from db
@@ -50,6 +52,7 @@ server.on('connection', (client) => {
       for (let i = 0; i < DB.length; i++) {
         if (DB[i].title == item.info) {
           if (item.action == 'complete') {
+            DB[i].taskCompleted = true;
             server.emit('highlightRemove', {index: i, action: 'complete'});
           } else {
             DB.splice(i, 1);

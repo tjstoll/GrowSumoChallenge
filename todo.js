@@ -1,5 +1,7 @@
 module.exports = class Todo {
-    constructor(title='') {
-        this.title = title
+    constructor(title='', taskCompleted=false) {
+        this.title = title;
+        // Keep track of todo state of completion
+        this.taskCompleted = taskCompleted;
     }
 }
